@@ -10,7 +10,7 @@ from keyboards.custom_keyboards import learning_keyboard
 async def next_verb(callback: types.CallbackQuery):
     prew_number = int(callback.data.split('-')[1]) + 1
     if prew_number == len(questions):
-        prew_number = 0
+        prew_number = 1
 
     question_obj = questions[str(prew_number)]
     question = question_obj['question']  # Питання опитування
