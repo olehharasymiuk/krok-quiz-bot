@@ -1,0 +1,7 @@
+**/__pycache__/
+draft.py
+*.db
+.idea
+*.log
+.env
+venv/
