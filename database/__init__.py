@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
-with open('/home/oleh/PycharmProjects/krok/database/main.json') as file:
+with open(f'{Path(__file__).parent}/main.json') as file:
     questions = json.load(file)
