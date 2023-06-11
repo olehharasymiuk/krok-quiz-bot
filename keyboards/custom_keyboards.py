@@ -7,6 +7,8 @@ def learning_keyboard(question_index):
 
     keyboard.insert(InlineKeyboardButton(
         '🔽', callback_data=f'next-{question_index}')
-    )
+    .insert(InlineKeyboardButton(
+        '🔀', callback_data=f'shufle-{question_index}')
+    ))
 
     return keyboard
