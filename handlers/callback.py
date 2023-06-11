@@ -38,7 +38,7 @@ async def next_verb(callback: types.CallbackQuery):
 async def shuffle_verb(callback: types.CallbackQuery):
     prew_number = int(callback.data.split('-')[1])
     cur_number = random.randint(1, len(questions))
-    while cur_number == prew_nimber:
+    while cur_number == prew_number:
         cur_number = random.randint(1, len(questions))
 
     question_obj = questions[str(cur_number)]
