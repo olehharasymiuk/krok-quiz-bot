@@ -12,7 +12,7 @@ async def next_verb(callback: types.CallbackQuery):
     if prew_number == len(questions):
         prew_number = 1
 
-    question_obj = questions[str(prew_number)]
+    question_obj = questions[str(cur_number)]
     question = question_obj['question']  # Питання опитування
 
     options = question_obj['options']
