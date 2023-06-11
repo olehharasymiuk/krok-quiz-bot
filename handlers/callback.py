@@ -59,7 +59,7 @@ async def shuffle_verb(callback: types.CallbackQuery):
 
     poll = types.Poll(question=question, type=types.PollType.QUIZ, correct_option_id=options.index(answer))
     await callback.bot.send_poll(chat_id=callback.message.chat.id, question=poll.question, options=options, type=poll.type,
-                                 correct_option_id=poll.correct_option_id, reply_markup=learning_keyboard(prew_number))
+                                 correct_option_id=poll.correct_option_id, reply_markup=learning_keyboard(cur_number))
 
     await callback.answer()
 
