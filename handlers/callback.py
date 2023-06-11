@@ -12,7 +12,7 @@ async def next_verb(callback: types.CallbackQuery):
     if prew_number == len(questions):
         prew_number = 1
 
-    question_obj = questions[str(cur_number)]
+    question_obj = questions[str(prew_number)]
     question = question_obj['question']  # Питання опитування
 
     options = question_obj['options']
@@ -41,7 +41,7 @@ async def shuffle_verb(callback: types.CallbackQuery):
     while cur_number == prew_nimber:
         cur_number = random.randint(1, len(questions))
 
-    question_obj = questions[str(prew_number)]
+    question_obj = questions[str(cur_number)]
     question = question_obj['question']  # Питання опитування
 
     options = question_obj['options']
