@@ -66,3 +66,4 @@ async def shuffle_verb(callback: types.CallbackQuery):
 
 def register_callback_handlers(dp: Dispatcher):
     dp.register_callback_query_handler(next_verb, Text(startswith='next'))
+    dp.register_callback_query_handler(shuffle_verb, Text(startswith='shuffle'))
