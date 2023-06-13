@@ -1,4 +1,4 @@
-from database.models import User, Progress
+# from database.models import User, Progress
 
 
 def create_message_link(username, thread_id, message_id, comment_id=None, media_timestamp=None):

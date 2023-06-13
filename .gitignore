@@ -5,3 +5,4 @@ draft.py
 *.log
 .env
 venv/
+old_drafts.py
