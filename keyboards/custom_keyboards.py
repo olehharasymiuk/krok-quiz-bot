@@ -18,8 +18,9 @@ def years_keyboard():
     button1 = InlineKeyboardButton('2018', callback_data=f'years-2018')
     button2 = InlineKeyboardButton('2023', callback_data=f'years-2023')
     button3 = InlineKeyboardButton('2019', callback_data=f'years-2019')
+    button4 = InlineKeyboardButton('2020', callback_data=f'years-2020')
 
-    keyboard.insert(button2).insert(button1).insert(button3)
+    keyboard.insert(button2).insert(button1).insert(button3).insert(button4)
 
     return keyboard
 

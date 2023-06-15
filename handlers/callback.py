@@ -103,7 +103,40 @@ async def all_years(callback: types.CallbackQuery):
     await callback.answer()
 
 
+async def choice_year(callback: types.CallbackQuery):
+
+    year = callback.data.split('-')[1]
+    tests = get_year(year)
+
+
+    index = random.randint(1, len(tests))
+
+    question_obj = get_year(year)[str(index)]
+    question = question_obj['question']  # Питання опитування
+
+    options = question_obj['options']
+    print(options)
+
+    if options:
+        random.shuffle(options)  # Список варіантів для опитування
+
+    answer = question_obj['answer']
+
+
+    if len(question) >= 300:
+        question = question[:295] + '...'
+
+    poll = types.Poll(question=question, type=types.PollType.QUIZ, correct_option_id=options.index(answer))
+    await callback.bot.send_poll(chat_id=callback.message.chat.id, question=poll.question, options=options,
+                                 type=poll.type,
+                                 correct_option_id=poll.correct_option_id,
+                                 reply_markup=learning_keyboard(index, year))
+
+    await callback.answer()
+
+
 def register_callback_handlers(dp: Dispatcher):
     dp.register_callback_query_handler(next_verb, Text(startswith='next'))
     dp.register_callback_query_handler(shuffle_verb, Text(startswith='shuffle'))
     dp.register_callback_query_handler(all_years, Text(startswith='all'))
+    dp.register_callback_query_handler(choice_year, Text(startswith='year'))
