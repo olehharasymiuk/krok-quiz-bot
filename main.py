@@ -4,9 +4,9 @@ from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.utils import executor
 from dotenv import load_dotenv
+from middlewares import setup_middleware
 
 # from database.models import init_db
-# from bot.middlewares import setup_middleware
 # from bot.misc.scheduler import scheduler
 from utils.set_commands import set_bot_commands
 from aiogram.utils.executor import start_webhook
@@ -41,7 +41,7 @@ async def on_startup(_):
 
     # init_db()
     # scheduler()
-    # setup_middleware(dp)
+    setup_middleware(dp)
     register_all_handlers(dp)
 
     await set_bot_commands(dp)

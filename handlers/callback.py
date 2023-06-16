@@ -1,7 +1,7 @@
 from aiogram import types, Dispatcher
 from aiogram.dispatcher.filters import Text
 from keyboards.custom_keyboards import learning_keyboard, shuffle
-from misc.functions import get_question_from_special_year, get_question_from_all_years
+from misc.functions import get_question
 
 
 async def next_verb(callback: types.CallbackQuery):
@@ -9,7 +9,7 @@ async def next_verb(callback: types.CallbackQuery):
     previous_question_index = int(callback.data.split('-')[1])
     year = callback.data.split('-')[2]
 
-    question_index, question, options, answer = get_question_from_special_year(year, previous_question_index)
+    question_index, question, options, answer = get_question(year, previous_question_index)
 
     await callback.answer()
     await callback.bot.send_poll(chat_id=callback.message.chat.id,
@@ -25,8 +25,7 @@ async def shuffle_verb(callback: types.CallbackQuery):
     previous_question_index = int(callback.data.split('-')[1])
     year = callback.data.split('-')[2]
 
-    question_index, question, options, answer = get_question_from_special_year(year, previous_question_index,
-                                                                               shuffle=True)
+    question_index, question, options, answer = get_question(year, previous_question_index, shuffle=True)
 
     await callback.answer()
     await callback.bot.send_poll(chat_id=callback.message.chat.id,
@@ -38,9 +37,10 @@ async def shuffle_verb(callback: types.CallbackQuery):
 
 
 async def all_years(callback: types.CallbackQuery):
-    previous_question_index = callback.data.split('-')[1]
+    previous_question_index = int(callback.data.split('-')[1])
 
-    question_index, question, options, answer = get_question_from_all_years(previous_question_index)
+    question_index, question, options, answer = get_question(
+        previous_question_index=previous_question_index, shuffle=True)
 
     await callback.answer()
     await callback.bot.send_poll(chat_id=callback.message.chat.id,
@@ -54,7 +54,7 @@ async def all_years(callback: types.CallbackQuery):
 async def choice_year(callback: types.CallbackQuery):
     year = callback.data.split('-')[1]
 
-    question_index, question, options, answer = get_question_from_special_year(year)
+    question_index, question, options, answer = get_question(year)
 
     await callback.answer()
     await callback.bot.send_poll(chat_id=callback.message.chat.id,
