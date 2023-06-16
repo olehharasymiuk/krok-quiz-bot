@@ -7,3 +7,4 @@ draft.py
 venv/
 old_drafts.py
 2020_1.json
+text_parser.py

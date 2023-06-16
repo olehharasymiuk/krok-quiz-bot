@@ -7,6 +7,7 @@ from database import get_all
 # from bot.database.models.goods import Order
 # from bot.misc.functions import work_with_product
 from keyboards.custom_keyboards import learning_keyboard, years_keyboard, shuffle
+from misc.functions import get_question_from_all_years
 
 
 # from bot.middlewares.throttling import rate_limit
@@ -23,31 +24,14 @@ async def start_command(message: types.Message):
 
 async def all_tests(message: types.Message):
 
-    all_years = get_all()
-    random_year = random.choice(all_years)
-    random_key = random.choice(list(random_year.keys()))
+    question_index, question, options, answer = get_question_from_all_years()
 
-    question_obj = random_year[str(random_key)]
-
-    question = question_obj['question']
-    options = question_obj['options']
-    answer = question_obj['answer']
-
-    if options:
-        random.shuffle(options)
-
-    if len(question) >= 300:
-        question = question[:295] + '...'
-
-    poll = types.Poll(question=question,
-                      type=types.PollType.QUIZ,
-                      correct_option_id=options.index(answer))
     await message.bot.send_poll(chat_id=message.chat.id,
-                                question=poll.question,
+                                question=question,
                                 options=options,
-                                type=poll.type,
-                                correct_option_id=poll.correct_option_id,
-                                reply_markup=shuffle(random_key))
+                                type=types.PollType.QUIZ,
+                                correct_option_id=options.index(answer),
+                                reply_markup=shuffle(question_index))
 
 
 def register_user_handlers(dp: Dispatcher):

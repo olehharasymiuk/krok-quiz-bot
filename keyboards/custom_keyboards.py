@@ -3,7 +3,7 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 def learning_keyboard(question_index, year):
 
-    keyboard = InlineKeyboardMarkup(row_width=2)
+    keyboard = InlineKeyboardMarkup()
     button1 = InlineKeyboardButton('🔽', callback_data=f'next-{question_index}-{year}')
     button2 = InlineKeyboardButton('🔀', callback_data=f'shuffle-{question_index}-{year}')
     keyboard.insert(button2).insert(button1)

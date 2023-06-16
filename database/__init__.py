@@ -1,22 +1,25 @@
 import json
 from pathlib import Path
+import os
+
+folder_path = Path(__file__).parent
 
 
 def get_year(year):
 
-    with open(f'{Path(__file__).parent}/{year}.json') as file:
+    with open(f'{folder_path}/{year}.json') as file:
         questions = json.load(file)
 
     return questions
 
 
 def get_all():
+    years = []
 
-    years = ['2018', '2019', '2020', '2021', '2022', '2023']
+    for file_name in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, file_name)
 
-    final = []
+        if os.path.isfile(file_path) and 'json' in file_name:
+            years.append(file_name.strip('.json'))
 
-    for year in years:
-        final.append(get_year(year))
-
-    return final
+    return years

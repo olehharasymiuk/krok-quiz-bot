@@ -1,138 +1,68 @@
-import random
-
 from aiogram import types, Dispatcher
 from aiogram.dispatcher.filters import Text
-
-from database import get_year, get_all
 from keyboards.custom_keyboards import learning_keyboard, shuffle
+from misc.functions import get_question_from_special_year, get_question_from_all_years
 
 
 async def next_verb(callback: types.CallbackQuery):
-    prew_number = int(callback.data.split('-')[1]) + 1
+
+    previous_question_index = int(callback.data.split('-')[1])
     year = callback.data.split('-')[2]
 
-    if prew_number == len(get_year(year)):
-        prew_number = 1
-
-    question_obj = get_year(year)[str(prew_number)]
-    question = question_obj['question']  # Питання опитування
-
-    options = question_obj['options']
-    print(options)
-
-    if options:
-        random.shuffle(options)  # Список варіантів для опитування
-
-    answer = question_obj['answer']
-
-    print(prew_number - 1)
-
-    if len(question) >= 300:
-        question = question[:295] + '...'
-
-    poll = types.Poll(question=question, type=types.PollType.QUIZ, correct_option_id=options.index(answer))
-    await callback.bot.send_poll(chat_id=callback.message.chat.id, question=poll.question, options=options, type=poll.type,
-                                 correct_option_id=poll.correct_option_id, reply_markup=learning_keyboard(prew_number, year))
+    question_index, question, options, answer = get_question_from_special_year(year, previous_question_index)
 
     await callback.answer()
+    await callback.bot.send_poll(chat_id=callback.message.chat.id,
+                                 question=question,
+                                 options=options,
+                                 type=types.PollType.QUIZ,
+                                 correct_option_id=options.index(answer),
+                                 reply_markup=learning_keyboard(question_index, year))
 
 
 async def shuffle_verb(callback: types.CallbackQuery):
 
-    prew_number = int(callback.data.split('-')[1])
+    previous_question_index = int(callback.data.split('-')[1])
     year = callback.data.split('-')[2]
 
-    cur_number = random.randint(1, len(get_year(year)))
-    while cur_number == prew_number:
-        cur_number = random.randint(1, len(get_year(year)))
-
-    question_obj = get_year(year)[str(cur_number)]
-    question = question_obj['question']  # Питання опитування
-
-    options = question_obj['options']
-
-    if options:
-        random.shuffle(options)  # Список варіантів для опитування
-
-    answer = question_obj['answer']
-
-
-    if len(question) >= 300:
-        question = question[:295] + '...'
-
-    poll = types.Poll(question=question, type=types.PollType.QUIZ, correct_option_id=options.index(answer))
-    await callback.bot.send_poll(chat_id=callback.message.chat.id, question=poll.question, options=options, type=poll.type,
-                                 correct_option_id=poll.correct_option_id, reply_markup=learning_keyboard(cur_number, year))
+    question_index, question, options, answer = get_question_from_special_year(year, previous_question_index,
+                                                                               shuffle=True)
 
     await callback.answer()
+    await callback.bot.send_poll(chat_id=callback.message.chat.id,
+                                 question=question,
+                                 options=options,
+                                 type=types.PollType.QUIZ,
+                                 correct_option_id=options.index(answer),
+                                 reply_markup=learning_keyboard(question_index, year))
 
 
 async def all_years(callback: types.CallbackQuery):
+    previous_question_index = callback.data.split('-')[1]
 
-    prewious_key = callback.data.split('-')[1]
-
-    all_years = get_all()
-    random_year = random.choice(all_years)
-    random_key = random.choice(list(random_year.keys()))
-
-    while random_key == prewious_key:
-        random_key = random.choice(list(random_year.keys()))
-
-    question_obj = random_year[str(random_key)]
-
-    question = question_obj['question']
-    options = question_obj['options']
-    answer = question_obj['answer']
-
-    if options:
-        random.shuffle(options)
-
-    if len(question) >= 300:
-        question = question[:295] + '...'
-
-    poll = types.Poll(question=question,
-                      type=types.PollType.QUIZ,
-                      correct_option_id=options.index(answer))
-    await callback.message.bot.send_poll(chat_id=callback.message.chat.id,
-                                question=poll.question,
-                                options=options,
-                                type=poll.type,
-                                correct_option_id=poll.correct_option_id,
-                                reply_markup=shuffle(random_key))
+    question_index, question, options, answer = get_question_from_all_years(previous_question_index)
 
     await callback.answer()
+    await callback.bot.send_poll(chat_id=callback.message.chat.id,
+                                 question=question,
+                                 options=options,
+                                 type=types.PollType.QUIZ,
+                                 correct_option_id=options.index(answer),
+                                 reply_markup=shuffle(question_index))
 
 
 async def choice_year(callback: types.CallbackQuery):
-
     year = callback.data.split('-')[1]
-    tests = get_year(year)
 
-
-    index = random.randint(1, len(tests))
-
-    question_obj = get_year(year)[str(index)]
-    question = question_obj['question']  # Питання опитування
-
-    options = question_obj['options']
-    print(options)
-
-    if options:
-        random.shuffle(options)  # Список варіантів для опитування
-
-    answer = question_obj['answer']
-
-
-    if len(question) >= 300:
-        question = question[:295] + '...'
-
-    poll = types.Poll(question=question, type=types.PollType.QUIZ, correct_option_id=options.index(answer))
-    await callback.bot.send_poll(chat_id=callback.message.chat.id, question=poll.question, options=options,
-                                 type=poll.type,
-                                 correct_option_id=poll.correct_option_id,
-                                 reply_markup=learning_keyboard(index, year))
+    question_index, question, options, answer = get_question_from_special_year(year)
 
     await callback.answer()
+    await callback.bot.send_poll(chat_id=callback.message.chat.id,
+                                 question=question,
+                                 options=options,
+                                 type=types.PollType.QUIZ,
+                                 correct_option_id=options.index(answer),
+                                 reply_markup=learning_keyboard(question_index, year))
 
 
 def register_callback_handlers(dp: Dispatcher):
