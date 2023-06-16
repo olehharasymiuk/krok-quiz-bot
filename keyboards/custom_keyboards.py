@@ -22,7 +22,7 @@ def years_keyboard():
     button5 = InlineKeyboardButton('2022', callback_data=f'years-2022')
     button6 = InlineKeyboardButton('2023', callback_data=f'years-2023')
 
-    keyboard.insert(button2).insert(button1).insert(button3).insert(button4).insert(button5).insert(button6)
+    keyboard.insert(button1).insert(button2).insert(button3).insert(button4).insert(button5).insert(button6)
 
     return keyboard
 
