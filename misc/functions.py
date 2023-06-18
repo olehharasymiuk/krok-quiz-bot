@@ -32,3 +32,12 @@ def get_question(year=None, previous_question_index=0, shuffle=False):
         question = question[:295] + '...'
 
     return index, question, options, answer
+
+
+class Question:
+
+    def __init__(self, year, index):
+        self.year = year
+        self.index = index
+
+
