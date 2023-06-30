@@ -1,43 +1,38 @@
-# from database.models import User, Progress
-import random
+import os
 
-from database import get_all, get_year
+import requests
 
 
-def get_question(year=None, previous_question_index=0, shuffle=False):
+def get_new_question(year=None, previous_question_index=0, shuffle=False):
+    api_source = os.environ.get('API_SOURCE')
+    question_index = previous_question_index + 1
 
-    if not year:
-        all_years = get_all()
-        year = random.choice(all_years)
+    if shuffle and year:
+        json_resp = requests.get(f'{api_source}/{year}').json()
 
-    tests = get_year(year)
-    index = previous_question_index + 1
-    if previous_question_index == len(tests):
-        index = 1
+    elif shuffle:
+        json_resp = requests.get(f'{api_source}/shuffle').json()
 
-    if shuffle:
-        index = random.randint(1, len(tests))
-        while index == previous_question_index:
-            index = random.randint(1, len(tests))
+    else:
+        json_resp = requests.get(f'{api_source}/{year}?question_index={question_index}').json()
 
-    question_obj = tests[str(index)]
-    question = question_obj['question']
-    options = question_obj['options']
-    answer = question_obj['answer']
-
-    if options:
-        random.shuffle(options)
-
-    if len(question) >= 300:
-        question = question[:295] + '...'
-
-    return index, question, options, answer
+    return Question(json_resp).get_list()
 
 
 class Question:
 
-    def __init__(self, year, index):
-        self.year = year
-        self.index = index
+    def __init__(self, json_object):
 
+        self.index = json_object['question_index']
+        self.question = json_object['question']
+        self.options = json_object['options']
+        self.answer = json_object['answer']
 
+    def get_list(self):
+
+        return [
+            self.index,
+            self.question,
+            self.options,
+            self.answer
+        ]

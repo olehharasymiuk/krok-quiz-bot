@@ -1,19 +1,9 @@
 
 from aiogram import Dispatcher, types
 
-from database import get_all
-# from bot import config
-# from bot.database.models.goods import Order
-# from bot.misc.functions import work_with_product
-from keyboards.custom_keyboards import learning_keyboard, years_keyboard, shuffle
+from keyboards.custom_keyboards import years_keyboard, shuffle
 from middlewares.throttling import rate_limit
-from misc.functions import get_question
-
-
-# from bot.middlewares.throttling import rate_limit
-# from bot.misc.pars import Shop, Product
-#
-# from bot.data.texts import HELP_COMMAND
+from misc.functions import get_new_question
 
 
 @rate_limit(limit=3)
@@ -25,7 +15,7 @@ async def start_command(message: types.Message):
 @rate_limit(limit=3)
 async def all_tests(message: types.Message):
 
-    question_index, question, options, answer = get_question()
+    question_index, question, options, answer = get_new_question(shuffle=True)
 
     await message.bot.send_poll(chat_id=message.chat.id,
                                 question=question,
